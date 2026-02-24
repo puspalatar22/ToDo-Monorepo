@@ -4,11 +4,12 @@
     <h2 class="title">{{ "TASK_LIST.TITLE" | translate }}</h2>
 
     <div class="header-actions">
-      <ui-todo-button style="margin-right: 1rem;"
+      <ui-todo-button
+        style="margin-right: 1rem"
         [label]="
           currentLang === 'en'
-            ? 'TASK_LIST.TRANSLATE_HI'
-            : 'TASK_LIST.TRANSLATE_EN'
+            ? ('TASK_LIST.TRANSLATE_HI' | translate)
+            : ('TASK_LIST.TRANSLATE_EN' | translate)
         "
         type="button"
         color="primary"

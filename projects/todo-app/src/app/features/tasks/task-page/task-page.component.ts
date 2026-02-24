@@ -41,18 +41,13 @@ message: string | null = null;
   }
 
   openEditModal(task: Task) {
-    this.selectedTask = { ...task }; // clone to avoid direct mutation
+    this.selectedTask = { ...task }; 
     this.showModal = true;
   }
 
 closeModal() {
   this.showModal = false;
 }
-
-// handleAddTask(task: { title: string; description?: string }) {
-//   this.addTask(task); 
-//   this.closeModal();
-// }
 
 handleSaveTask(task: { title: string; description?: string }) {
   if (this.selectedTask) {
