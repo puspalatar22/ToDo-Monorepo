@@ -1,0 +1,33 @@
+button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+
+  &.primary {
+    background-color: #2563eb;
+    color: #fff;
+    &:hover { background-color: #1e40af; }
+  }
+
+  &.delete {
+    background-color: #dc2626;
+    color: #fff;
+    &:hover { background-color: #b91c1c; }
+  }
+
+  &.edit {
+    background-color: #16a34a;
+    color: #fff;
+    &:hover { background-color: #15803d; }
+  }
+
+  &.complete {
+    background-color: #f59e0b;
+    color: #fff;
+    &:hover { background-color: #b45309; }
+  }
+ 
+}

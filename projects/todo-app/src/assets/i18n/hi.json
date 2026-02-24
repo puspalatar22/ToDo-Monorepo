@@ -1,0 +1,30 @@
+{
+  "TASK_LIST": {
+     "TRANSLATE_HI": "हिंदी में अनुवाद करें",
+    "TRANSLATE_EN": "Translate in English",
+
+    "TITLE": "शीर्षक",
+    "DESCRIPTION": "विवरण",
+    "STATUS": "स्थिति",
+    "CREATED": "बनाया गया",
+    "ACTIONS": "कार्रवाई",
+    "COMPLETED": "पूर्ण",
+    "PENDING": "लंबित",
+
+    "ADD_NEW": "नया कार्य जोड़ें",
+    "ADD_TASK": "कार्य जोड़ें",
+    "EDIT_TASK": "कार्य संपादित करें",
+    "UNDO": "पूर्ववत करें",
+    "COMPLETE": "पूर्ण करें",
+    "DELETE": "हटाएं",
+    "EDIT": "संपादित करें",
+    "TITLE_PLACEHOLDER": "कार्य शीर्षक दर्ज करें",
+    "DESCRIPTION_PLACEHOLDER": "कार्य विवरण दर्ज करें"
+  },
+
+    "TOAST": {
+    "TASK_ADDED": "कार्य सफलतापूर्वक जोड़ा गया!",
+    "TASK_DELETED": "कार्य हटा दिया गया।",
+    "TASK_UPDATED": "कार्य सफलतापूर्वक अपडेट किया गया!"
+  }
+}

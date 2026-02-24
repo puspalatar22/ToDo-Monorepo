@@ -1,0 +1,138 @@
+/* ===== Container ===== */
+.container {
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: #111827;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .add-btn, .lang-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 5px;
+
+    &:hover { background: #1e40af; }
+    &:active { transform: scale(0.97); }
+  }
+}
+
+/* ===== Table ===== */
+.task-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.25rem;
+
+  th, td { padding: 0.75rem 1rem; text-align: left; }
+  th { background: #f9fafb; font-weight: 600; border-bottom: 2px solid #e5e7eb; }
+
+  tbody tr {
+    background: #fff;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    display: table-row; /* ensure table layout */
+  }
+
+  tbody tr:hover { background: #f3f4f6; }
+
+  /* Completed row */
+  &.completed, tr.completed {
+    color: #6b7280;
+    opacity: 0.85;
+
+    td.title, td.description, .status {
+      text-decoration: line-through;
+    }
+  }
+}
+
+/* ===== Status Badge ===== */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #f3f4f6;
+  color: #374151;
+
+  &.done {
+    background: #dcfce7;
+    color: #15803d;
+    font-weight: 600;
+
+    &::before { content: '✔'; font-size: 0.75rem; color: #15803d; }
+  }
+}
+
+/* ===== Actions ===== */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: 0.2s;
+
+    &.toggle { background: #2563eb; color: #fff; }
+    &.toggle:hover { background: #1e40af; }
+
+    &.delete { background: #ef4444; color: #fff; }
+    &.delete:hover { background: #b91c1c; }
+    &.edit { background: #19e638; color: #fff; }
+    &.edit:hover { background: #0cc94ead; }
+  }
+}
+
+/* ===== Empty State ===== */
+.empty { text-align: center; color: #6b7280; font-style: italic; padding: 1.5rem 0; }
+
+/* ===== Modal ===== */
+.backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000;
+}
+
+.modal {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  width: 400px; max-width: 90%;
+}
+
+.modal-content {
+  background: #fff; padding: 1.5rem; border-radius: 0.75rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+}
+
+.close-btn { background: transparent; border: none; font-size: 1.5rem; cursor: pointer; };
+

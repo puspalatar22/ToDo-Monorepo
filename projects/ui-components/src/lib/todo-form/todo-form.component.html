@@ -1,0 +1,5 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input formControlName="title" [placeholder]="titlePlaceholder" />
+  <textarea formControlName="description" [placeholder]="descriptionPlaceholder"></textarea>
+  <button type="submit">{{ addButtonText }}</button>
+</form>

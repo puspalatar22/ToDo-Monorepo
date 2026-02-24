@@ -1,0 +1,30 @@
+{
+  "TASK_LIST": {
+     "TRANSLATE_HI": "Translate in Hindi",
+    "TRANSLATE_EN": "Translate in English",
+    
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "STATUS": "Status",
+    "CREATED": "Created",
+    "ACTIONS": "Actions",
+    "COMPLETED": "Completed",
+    "PENDING": "Pending",
+
+    "ADD_NEW": "Add New Task",
+    "ADD_TASK": "Add Task",
+    "EDIT_TASK": "Edit Task",
+    "UNDO": "Undo",
+    "COMPLETE": "Complete",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "TITLE_PLACEHOLDER": "Enter task title",
+    "DESCRIPTION_PLACEHOLDER": "Enter task description"
+  },
+
+  "TOAST": {
+    "TASK_ADDED": "Task added successfully!",
+    "TASK_DELETED": "Task deleted.",
+    "TASK_UPDATED": "Task updated successfully!"
+  }
+}
