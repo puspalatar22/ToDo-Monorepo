@@ -1,0 +1,32 @@
+<div class="login-container">
+
+  <!-- Language Switch -->
+  <div class="login-topbar">
+    <ui-todo-button
+      class="lang-btn"
+      [label]="(currentLang === 'en' ? 'TASK_LIST.TRANSLATE_HI' : 'TASK_LIST.TRANSLATE_EN') | translate"
+      type="button"
+      color="primary"
+      (click)="switchLanguage()"
+    ></ui-todo-button>
+  </div>
+
+  <!-- Card -->
+  <div class="login-card">
+
+    <div class="login-header">
+      <h1>{{ "LOGIN.TITLE" | translate }}</h1>
+      <p>{{ "LOGIN.SUBTITLE" | translate }}</p>
+    </div>
+
+    <div class="login-form">
+      <ui-todo-form
+        [config]="loginFormConfig"
+        [initialValues]="{}"
+        (submitForm)="handleLogin($event)"
+      ></ui-todo-form>
+    </div>
+
+  </div>
+
+</div>

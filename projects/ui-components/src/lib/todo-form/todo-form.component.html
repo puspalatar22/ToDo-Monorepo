@@ -1,5 +1,10 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <input formControlName="title" [placeholder]="titlePlaceholder" />
-  <textarea formControlName="description" [placeholder]="descriptionPlaceholder"></textarea>
-  <button type="submit">{{ addButtonText }}</button>
+  <ng-container *ngFor="let field of config.fields">
+    <input *ngIf="field.type !== 'textarea'" [type]="field.type" [formControlName]="field.name" [placeholder]="placeholders[field.name]" />
+    <textarea *ngIf="field.type === 'textarea'" [formControlName]="field.name" [placeholder]="placeholders[field.name]"></textarea>
+
+    <small *ngIf="form.get(field.name)?.invalid && form.get(field.name)?.touched">{{field.name}} is required</small>
+  </ng-container>
+
+  <button type="submit" [disabled]="!form.valid">{{ submitButtonText }}</button>
 </form>

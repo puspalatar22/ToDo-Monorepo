@@ -4,26 +4,28 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { UiComponentsModule } from 'projects/ui-components/src/public-api';
 
-import { TasksRoutingModule } from './tasks-routing.module';
-import { TaskPageComponent } from './task-page/task-page.component';
-import { taskReducer } from './state/task.reducer';
-import { TaskEffects } from './state/task.effects';
+import { AuthRoutingModule } from './auth-routing.module';
+import { LoginComponent } from './login/login.component';
+import { authReducer } from '../features/tasks/state/auth-state/auth.reducer';
+import { AuthEffects } from '../features/tasks/state/auth-state/auth.effects';
 
 @NgModule({
   declarations: [
-    TaskPageComponent    
+    LoginComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
     UiComponentsModule,
-    TasksRoutingModule,  
-    StoreModule.forFeature('tasks', taskReducer),
-    EffectsModule.forFeature([TaskEffects]),
+    AuthRoutingModule,
+
+    StoreModule.forFeature('auth', authReducer),   
+    EffectsModule.forFeature([AuthEffects])
   ]
 })
-export class TasksModule { }
+export class AuthModule { }

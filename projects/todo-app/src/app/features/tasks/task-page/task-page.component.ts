@@ -1,92 +1,116 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Task } from 'models';
+import { FormConfig, Task } from 'models';
 import { Observable } from 'rxjs';
 import { selectAllTasks } from '../state/task.selector';
-import { addTask,loadTasks, toggleTaskCompletion, deleteTask, updateTask} from '../state/task.actions';
+import {
+  addTask,
+  loadTasks,
+  toggleTaskCompletion,
+  deleteTask,
+  updateTask,
+} from '../state/task.actions';
 import { ToastService } from 'shared-services';
 import { TranslateService } from '@ngx-translate/core';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-task-page',
   templateUrl: './task-page.component.html',
-  styleUrls: ['./task-page.component.scss']
+  styleUrls: ['./task-page.component.scss'],
 })
-export class TaskPageComponent {
-tasks$: Observable<Task[]>;
-currentLang: string = 'en';
-selectedTask: Task | null = null;
+export class TaskPageComponent implements OnInit {
+  tasks$: Observable<Task[]> | undefined;
+  currentLang = 'en';
+  selectedTask: Task | null = null;
+  showModal = false;
 
+  todoFormConfig: FormConfig = {
+    fields: [
+      {
+        name: 'title',
+        type: 'text',
+        translationKey: 'TASK_LIST.TITLE_PLACEHOLDER',
+        validators: [Validators.required],
+      },
+      {
+        name: 'description',
+        type: 'textarea',
+        translationKey: 'TASK_LIST.DESCRIPTION_PLACEHOLDER',
+      },
+    ],
+    submitButtonKey: 'TASK_LIST.ADD_TASK',
+  };
 
-constructor(private store: Store, @Inject(ToastService) private toastService: ToastService, private translate: TranslateService) {
-  this.tasks$ = this.store.select(selectAllTasks);
-  this.store.dispatch(loadTasks());
-  this.translate.setDefaultLang('en');
-  this.translate.use(this.currentLang);
+  constructor(
+    private store: Store,
+    @Inject(ToastService) private toastService: ToastService,
+    private translate: TranslateService,
+  ) {
+    this.translate.setDefaultLang('en');
+    this.translate.use(this.currentLang);
+  }
+  ngOnInit(): void {
+    this.tasks$ = this.store.select(selectAllTasks);
+    this.store.dispatch(loadTasks());
+  }
 
-}
-
-  switchLanguage() {
-    this.currentLang = this.currentLang === 'en' ? 'hi' : 'en';
+  switchLanguage(lang: string) {
+    // this.currentLang = this.currentLang === 'en' ? 'hi' : 'en';
+    lang === 'en' ? 'hi' : 'en';
+    this.currentLang = lang;
     this.translate.use(this.currentLang);
   }
 
-showModal = false;
-
-message: string | null = null;
-
- openAddModal() {
+  openAddModal() {
     this.selectedTask = null;
+    this.todoFormConfig = {
+      ...this.todoFormConfig,
+      submitButtonKey: 'TASK_LIST.ADD_TASK',
+    };
     this.showModal = true;
   }
 
   openEditModal(task: Task) {
-    this.selectedTask = { ...task }; 
+    this.selectedTask = { ...task };
+    this.todoFormConfig = {
+      ...this.todoFormConfig,
+      submitButtonKey: 'TASK_LIST.EDIT_TASK',
+    };
     this.showModal = true;
   }
 
-closeModal() {
-  this.showModal = false;
-}
-
-handleSaveTask(task: { title: string; description?: string }) {
-  if (this.selectedTask) {
-    const updatedTask: Task = {
-      ...this.selectedTask, 
-      ...task               
-    };
-    this.store.dispatch(updateTask({ task: updatedTask }));
-    this.showToast('TOAST.TASK_UPDATED', 'success');
-  } else {
-    const newTask: Task = {
-      ...task,
-      id: crypto.randomUUID(),
-      completed: false,
-      createdAt: new Date()
-    };
-    this.store.dispatch(addTask({ task: newTask }));
-    this.showToast('TOAST.TASK_ADDED', 'success');
+  closeModal() {
+    this.showModal = false;
+    this.selectedTask = null;
   }
 
-  this.closeModal();
-  this.selectedTask = null; 
-}
+  handleSaveTask(formValue: Record<string, any>) {
+    const title = formValue['title'] as string;
+    const description = formValue['description'] as string | undefined;
 
-addTask(task:{title:string, description?:string}){
-  const newTask : Task = {
-    id: crypto.randomUUID(),
-    title: task.title,
-    description: task.description,
-    completed: false,
-    createdAt: new Date()
+    if (this.selectedTask) {
+      const updatedTask: Task = {
+        ...this.selectedTask,
+        title,
+        description,
+      };
+      this.store.dispatch(updateTask({ task: updatedTask }));
+      this.showToast('TOAST.TASK_UPDATED', 'success');
+    } else {
+      const newTask: Task = {
+        title,
+        description,
+        id: crypto.randomUUID(),
+        completed: false,
+        createdAt: new Date(),
+      };
+      this.store.dispatch(addTask({ task: newTask }));
+      this.showToast('TOAST.TASK_ADDED', 'success');
+    }
+
+    this.closeModal();
   }
-  this.store.dispatch(addTask({task: newTask}));
-  // this.toastService.show('Task added successfully!', "success");
-
-  this.translate.get('TOAST.TASK_ADDED').subscribe((msg: string) => {{
-    this.toastService.show(msg, "success");
-  }});
-}
 
   toggleTask(id: string) {
     this.store.dispatch(toggleTaskCompletion({ id }));
@@ -94,15 +118,11 @@ addTask(task:{title:string, description?:string}){
 
   deleteTask(id: string) {
     this.store.dispatch(deleteTask({ id }));
-    this.translate.get('TOAST.TASK_DELETED').subscribe((msg: string) => {{
-
-      this.toastService.show(msg, "error");
-    }});
+    this.showToast('TOAST.TASK_DELETED', 'error');
   }
 
-
-    private showToast(key: string, type: 'success' | 'error' | 'info') {
-    this.translate.get(key).subscribe(msg => {
+  private showToast(key: string, type: 'success' | 'error' | 'info') {
+    this.translate.get(key).subscribe((msg: string) => {
       this.toastService.show(msg, type);
     });
   }

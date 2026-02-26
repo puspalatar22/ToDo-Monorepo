@@ -1,29 +1,23 @@
 <div class="container">
+
   <!-- Header -->
   <div class="header">
     <h2 class="title">{{ "TASK_LIST.TITLE" | translate }}</h2>
 
-    <div class="header-actions">
-      <ui-todo-button
-        style="margin-right: 1rem"
-        [label]="
-          currentLang === 'en'
-            ? ('TASK_LIST.TRANSLATE_HI' | translate)
-            : ('TASK_LIST.TRANSLATE_EN' | translate)
-        "
+    <div>
+      <ui-todo-button  style="margin-right: 16px;"
+        [label]="(currentLang === 'en' ? 'TASK_LIST.TRANSLATE_HI' : 'TASK_LIST.TRANSLATE_EN') | translate"
         type="button"
         color="primary"
-        (click)="switchLanguage()"
-      >
-      </ui-todo-button>
+        (click)="switchLanguage(currentLang === 'en' ? 'hi' : 'en')"
+      ></ui-todo-button>
 
       <ui-todo-button
-        [label]="'TASK_LIST.ADD_NEW'"
+        [label]="'TASK_LIST.ADD_NEW' | translate"
         type="button"
         color="primary"
         (click)="openAddModal()"
-      >
-      </ui-todo-button>
+      ></ui-todo-button>
     </div>
   </div>
 
@@ -32,50 +26,47 @@
     <table class="task-table" *ngIf="tasks.length > 0; else emptyState">
       <thead>
         <tr>
-          <th>{{ "TASK_LIST.TITLE" | translate }}</th>
+          <th>{{ "TASK_LIST.TITLE"       | translate }}</th>
           <th>{{ "TASK_LIST.DESCRIPTION" | translate }}</th>
-          <th>{{ "TASK_LIST.STATUS" | translate }}</th>
-          <th>{{ "TASK_LIST.CREATED" | translate }}</th>
-          <th>{{ "TASK_LIST.ACTIONS" | translate }}</th>
+          <th>{{ "TASK_LIST.STATUS"      | translate }}</th>
+          <th>{{ "TASK_LIST.CREATED"     | translate }}</th>
+          <th>{{ "TASK_LIST.ACTIONS"     | translate }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let task of tasks" [class.completed]="task.completed">
           <td>{{ task.title }}</td>
-          <td>{{ task.description || "-" }}</td>
+          <td>{{ task.description || "—" }}</td>
+
           <td>
             <span class="status" [class.done]="task.completed">
-              {{
-                task.completed
-                  ? ("TASK_LIST.COMPLETED" | translate)
-                  : ("TASK_LIST.PENDING" | translate)
-              }}
+              {{ (task.completed ? "TASK_LIST.COMPLETED" : "TASK_LIST.PENDING") | translate }}
             </span>
           </td>
+
           <td>{{ task.createdAt | date: "short" }}</td>
+
           <td class="actions">
             <ui-todo-button
-              [label]="task.completed ? 'TASK_LIST.UNDO' : 'TASK_LIST.COMPLETE'"
+              [label]="(task.completed ? 'TASK_LIST.UNDO' : 'TASK_LIST.COMPLETE') | translate"
               type="button"
               color="complete"
               (click)="toggleTask(task.id)"
-            >
-            </ui-todo-button>
+            ></ui-todo-button>
 
             <ui-todo-button
-              [label]="'TASK_LIST.DELETE'"
-              type="button"
-              color="delete"
-              (click)="deleteTask(task.id)"
-            >
-            </ui-todo-button>
-            <ui-todo-button
-              [label]="'TASK_LIST.EDIT'"
+              [label]="'TASK_LIST.EDIT' | translate"
               type="button"
               color="edit"
               (click)="openEditModal(task)"
-            >
-            </ui-todo-button>
+            ></ui-todo-button>
+
+            <ui-todo-button
+              [label]="'TASK_LIST.DELETE' | translate"
+              type="button"
+              color="delete"
+              (click)="deleteTask(task.id)"
+            ></ui-todo-button>
           </td>
         </tr>
       </tbody>
@@ -87,24 +78,29 @@
   </ng-container>
 
   <!-- Modal -->
-  <div class="backdrop" *ngIf="showModal" (click)="closeModal()"></div>
+  <ng-container *ngIf="showModal">
 
-  <div class="modal" *ngIf="showModal">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>
-          {{
-            selectedTask
-              ? ("TASK_LIST.EDIT" | translate)
-              : ("TASK_LIST.ADD_NEW" | translate)
-          }}
-        </h3>
-        <button class="close-btn" (click)="closeModal()">×</button>
+    <!-- Backdrop -->
+    <div class="backdrop" (click)="closeModal()"></div>
+
+    <!-- Modal Panel -->
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>{{ (selectedTask ? "TASK_LIST.EDIT" : "TASK_LIST.ADD_NEW") | translate }}</h3>
+          <button class="close-btn" (click)="closeModal()" aria-label="Close">×</button>
+        </div>
+
+        <ui-todo-form
+          [config]="todoFormConfig"
+          [initialValues]="selectedTask ?? {}"
+          (submitForm)="handleSaveTask($event)"
+        ></ui-todo-form>
+
       </div>
-
-      <!-- Reusable Form Component -->
-      <ui-todo-form [task]="selectedTask" (submitTask)="handleSaveTask($event)">
-      </ui-todo-form>
     </div>
-  </div>
+
+  </ng-container>
+
 </div>

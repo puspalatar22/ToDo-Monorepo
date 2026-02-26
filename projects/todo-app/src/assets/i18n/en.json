@@ -10,6 +10,7 @@
     "ACTIONS": "Actions",
     "COMPLETED": "Completed",
     "PENDING": "Pending",
+    "NO_TASKS": "No tasks available. Please add a new task.",
 
     "ADD_NEW": "Add New Task",
     "ADD_TASK": "Add Task",
@@ -26,5 +27,16 @@
     "TASK_ADDED": "Task added successfully!",
     "TASK_DELETED": "Task deleted.",
     "TASK_UPDATED": "Task updated successfully!"
-  }
+  },
+
+"LOGIN": {
+  "TITLE":               "Welcome",
+  "SUBTITLE":            "Sign in to manage your tasks",
+  "EMAIL_PLACEHOLDER":   "Enter your email",
+  "PASSWORD_PLACEHOLDER":"Enter your password",
+  "SUBMIT":              "Sign In",
+  "SUCCESS":             "Logged in successfully!",
+  "NO_ACCOUNT":          "Don't have an account?",
+  "REGISTER":            "Register here"
+}
 }

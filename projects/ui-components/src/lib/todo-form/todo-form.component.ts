@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { Task } from 'models';
+import { FormConfig, Task } from 'models';
 
 @Component({
   selector: 'ui-todo-form',
@@ -9,56 +9,58 @@ import { Task } from 'models';
   styleUrls: ['./todo-form.component.scss'],
 })
 export class TodoFormComponent implements OnInit {
-  form: FormGroup;
+  @Input() config!: FormConfig;
+  @Input() initialValues: Record<string, any> = {};
+  @Output() submitForm = new EventEmitter<Record<string, any>>();
 
-  titlePlaceholder = '';
-  descriptionPlaceholder = '';
-  addButtonText = '';
-
-  @Output() submitTask = new EventEmitter<Task>();
-  @Input() task: Task | null = null;
+  form!: FormGroup;
+  placeholders: Record<string, string> = {};
+  submitButtonText: string = '';
 
   constructor(
     private fb: FormBuilder,
     private translate: TranslateService,
-  ) {
-    this.form = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    this.form = this.fb.group({
-      title: [this.task?.title || ''],
-      description: [this.task?.description || ''],
-    });
-
-    // Dynamic translation for placeholders as shown before
-    this.titlePlaceholders();
+    this.buildForm();
+    this.loadTranslations();
   }
 
-  private titlePlaceholders() {
-    this.translate
-      .get('TASK_LIST.TITLE_PLACEHOLDER')
-      .subscribe((res: string) => {
-        this.titlePlaceholder = res;
+  ngOnChanges() {
+    if (this.form) {
+      this.buildForm();
+      this.loadTranslations();
+    }
+  }
+
+  private buildForm() {
+    const controls: Record<string, any> = {};
+    this.config.fields.forEach((field) => {
+      controls[field.name] = [
+        this.initialValues[field.name] || '',
+        field.validators || [],
+      ];
+    });
+
+    this.form = this.fb.group(controls);
+  }
+
+  private loadTranslations() {
+    this.config.fields.forEach((field) => {
+      this.translate.get(field.translationKey).subscribe((translated) => {
+        this.placeholders[field.name] = translated;
       });
-    this.translate
-      .get('TASK_LIST.DESCRIPTION_PLACEHOLDER')
-      .subscribe((res: string) => {
-        this.descriptionPlaceholder = res;
-      });
-      this.task ? this.translate.get('TASK_LIST.EDIT_TASK').subscribe((res: string) => {
-        this.addButtonText = res;
-      }) : this.translate.get('TASK_LIST.ADD_TASK').subscribe((res: string) => {
-        this.addButtonText = res;
-      }); 
+    });
+
+    this.translate.get(this.config.submitButtonKey).subscribe((res) => {
+      this.submitButtonText = res;
+    });
   }
 
   onSubmit() {
     if (this.form.valid) {
-      this.submitTask.emit(this.form.value);
+      this.submitForm.emit(this.form.value);
       this.form.reset();
     }
   }
