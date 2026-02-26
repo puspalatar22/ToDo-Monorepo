@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'ui-todo-button',
@@ -9,6 +9,9 @@ export class TodoButtonComponent  {
 @Input() label='';
 @Input() color: 'primary' | 'edit' | 'delete' | 'complete' = 'primary';
 @Input() type : 'button' | 'submit' | 'reset' = 'button';
-@Output() click = new EventEmitter<Event>();
-
+@Output() click = new EventEmitter<MouseEvent>();
+ @HostListener('click', ['$event'])
+  onClick(event: MouseEvent) {
+    event.stopPropagation(); 
+  }
 }

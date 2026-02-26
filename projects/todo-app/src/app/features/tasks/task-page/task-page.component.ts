@@ -42,6 +42,7 @@ export class TaskPageComponent implements OnInit {
       },
     ],
     submitButtonKey: 'TASK_LIST.ADD_TASK',
+    resetOnSubmit: true,
   };
 
   constructor(
@@ -57,10 +58,8 @@ export class TaskPageComponent implements OnInit {
     this.store.dispatch(loadTasks());
   }
 
-  switchLanguage(lang: string) {
-    // this.currentLang = this.currentLang === 'en' ? 'hi' : 'en';
-    lang === 'en' ? 'hi' : 'en';
-    this.currentLang = lang;
+  switchLanguage() {
+    this.currentLang = this.currentLang === 'en' ? 'hi' : 'en';
     this.translate.use(this.currentLang);
   }
 
@@ -82,19 +81,19 @@ export class TaskPageComponent implements OnInit {
     this.showModal = true;
   }
 
-openLogoutModal() {
-  this.showLogOutModal = true;
-}
+  openLogoutModal() {
+    this.showLogOutModal = true;
+  }
 
-cancelLogout() {
-  this.showLogOutModal = false;
-}
+  cancelLogout() {
+    this.showLogOutModal = false;
+  }
 
-confirmLogout() {
-    console.log('Logout clicked'); 
-  this.showLogOutModal = false;
-  this.store.dispatch(logout());
-}
+  confirmLogout() {
+    console.log('Logout clicked');
+    this.showLogOutModal = false;
+    this.store.dispatch(logout());
+  }
 
   closeModal() {
     this.showModal = false;

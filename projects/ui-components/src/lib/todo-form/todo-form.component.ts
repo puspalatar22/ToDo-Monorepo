@@ -61,7 +61,10 @@ export class TodoFormComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.submitForm.emit(this.form.value);
-      this.form.reset();
+
+      if(this.config.resetOnSubmit !== false){
+        this.form.reset();
+      }
     }
   }
 }

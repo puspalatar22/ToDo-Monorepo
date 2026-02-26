@@ -8,4 +8,5 @@ export interface FieldConfig {
 export interface FormConfig {
     fields: FieldConfig[];
     submitButtonKey: string;
+    resetOnSubmit?: boolean; 
 }   

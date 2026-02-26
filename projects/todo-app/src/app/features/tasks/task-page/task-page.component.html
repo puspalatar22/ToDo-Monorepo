@@ -9,7 +9,7 @@
         [label]="(currentLang === 'en' ? 'TASK_LIST.TRANSLATE_HI' : 'TASK_LIST.TRANSLATE_EN') | translate"
         type="button"
         color="primary"
-        (click)="switchLanguage(currentLang === 'en' ? 'hi' : 'en')"
+        (click)="switchLanguage()"
       ></ui-todo-button>
 
       <ui-todo-button style="margin-right: 16px;"
@@ -88,7 +88,7 @@
   <ng-container *ngIf="showModal">
 
     <!-- Backdrop -->
-    <div class="backdrop" (click)="closeModal()"></div>
+    <div class="backdrop" ></div>
 
     <!-- Modal Panel -->
     <div class="modal" role="dialog" aria-modal="true">
@@ -113,7 +113,7 @@
 
   <!-- logOut Modal -->
 <ng-container *ngIf="showLogOutModal">
-  <div class="logout-modal-backdrop" (click)="cancelLogout()">
+  <div class="logout-modal-backdrop">
     <div class="logout-modal-card" (click)="$event.stopPropagation()">
       <h2>{{ "LOGOUT.TITLE" | translate }}</h2>
       <p>{{ "LOGOUT.MESSAGE" | translate }}</p>
