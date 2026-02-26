@@ -12,11 +12,18 @@
         (click)="switchLanguage(currentLang === 'en' ? 'hi' : 'en')"
       ></ui-todo-button>
 
-      <ui-todo-button
+      <ui-todo-button style="margin-right: 16px;"
         [label]="'TASK_LIST.ADD_NEW' | translate"
         type="button"
         color="primary"
         (click)="openAddModal()"
+      ></ui-todo-button>
+
+      <ui-todo-button
+        [label]="'LOGOUT.TITLE' | translate"
+        type="button"
+        color="primary"
+        (click)="openLogoutModal()"
       ></ui-todo-button>
     </div>
   </div>
@@ -102,5 +109,25 @@
     </div>
 
   </ng-container>
+
+
+  <!-- logOut Modal -->
+<ng-container *ngIf="showLogOutModal">
+  <div class="logout-modal-backdrop" (click)="cancelLogout()">
+    <div class="logout-modal-card" (click)="$event.stopPropagation()">
+      <h2>{{ "LOGOUT.TITLE" | translate }}</h2>
+      <p>{{ "LOGOUT.MESSAGE" | translate }}</p>
+
+      <div class="logout-modal-actions">
+        <button class="btn-secondary" (click)="cancelLogout()">
+          {{ "LOGOUT.NO" | translate }}
+        </button>
+        <button class="btn-danger" (click)="confirmLogout()">
+          {{ "LOGOUT.YES" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
 
 </div>

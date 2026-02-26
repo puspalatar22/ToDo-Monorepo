@@ -13,6 +13,7 @@ import {
 import { ToastService } from 'shared-services';
 import { TranslateService } from '@ngx-translate/core';
 import { Validators } from '@angular/forms';
+import { logout } from '../state/auth-state/auth.actions';
 
 @Component({
   selector: 'app-task-page',
@@ -24,6 +25,7 @@ export class TaskPageComponent implements OnInit {
   currentLang = 'en';
   selectedTask: Task | null = null;
   showModal = false;
+  showLogOutModal = false;
 
   todoFormConfig: FormConfig = {
     fields: [
@@ -79,6 +81,20 @@ export class TaskPageComponent implements OnInit {
     };
     this.showModal = true;
   }
+
+openLogoutModal() {
+  this.showLogOutModal = true;
+}
+
+cancelLogout() {
+  this.showLogOutModal = false;
+}
+
+confirmLogout() {
+    console.log('Logout clicked'); 
+  this.showLogOutModal = false;
+  this.store.dispatch(logout());
+}
 
   closeModal() {
     this.showModal = false;

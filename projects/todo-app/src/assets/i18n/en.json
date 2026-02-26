@@ -38,5 +38,12 @@
   "SUCCESS":             "Logged in successfully!",
   "NO_ACCOUNT":          "Don't have an account?",
   "REGISTER":            "Register here"
+},
+
+"LOGOUT": {
+  "TITLE": "Logout",
+  "MESSAGE": "Are you sure you want to logout?",
+  "YES": "Yes",
+  "NO": "No"
 }
 }

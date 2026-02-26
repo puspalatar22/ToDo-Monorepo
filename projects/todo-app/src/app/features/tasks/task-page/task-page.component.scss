@@ -136,5 +136,39 @@
 
 .close-btn { background: transparent; border: none; font-size: 1.5rem; cursor: pointer; };
 
+/* logout modal */
+.logout-modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+}
 
+.logout-modal-card {
+  background: #fff; padding: 2rem; border-radius: 12px;
+  max-width: 400px; width: 90%; text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.logout-modal-card h2 {
+  margin-bottom: 1rem; font-size: 1.5rem;
+}
+
+.logout-modal-card p {
+  margin-bottom: 2rem; color: #555;
+}
+
+.logout-modal-actions {
+  display: flex; gap: 1rem;
+}
+
+.logout-modal-actions button {
+  flex: 1; padding: 0.5rem 1rem; font-weight: 600;
+  border-radius: 6px; border: none; cursor: pointer;
+}
+
+.btn-secondary { background: #e0e0e0; color: #333; }
+.btn-secondary:hover { background: #d5d5d5; }
+.btn-danger { background: #d9534f; color: #fff; }
+.btn-danger:hover { background: #c9302c; }
 

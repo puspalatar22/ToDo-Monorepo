@@ -1,7 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { createEffect, ofType, Actions } from "@ngrx/effects";
-import { Action } from "@ngrx/store";
 import { AuthService } from "shared-services";
 import { login, loginFailure, loginSuccess, logout, restoreSession, restoreSessionFailure, restoreSessionSuccess } from "./auth.actions";
 import { catchError, map, of, switchMap, tap } from "rxjs";
