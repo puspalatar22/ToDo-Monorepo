@@ -1,10 +1,36 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <ng-container *ngFor="let field of config.fields">
-    <input *ngIf="field.type !== 'textarea'" [type]="field.type" [formControlName]="field.name" [placeholder]="placeholders[field.name]" />
-    <textarea *ngIf="field.type === 'textarea'" [formControlName]="field.name" [placeholder]="placeholders[field.name]"></textarea>
+    <div class="form-field">
+      <input
+        *ngIf="field.type !== 'textarea'"
+        [type]="field.type"
+        [formControlName]="field.name"
+        [placeholder]="placeholders[field.name]"
+        [class.input-error]="isInvalid(field.name)"
+        [autocomplete]="field.type === 'password' ? 'new-password' : 'off'"
+      />
+      <textarea
+        *ngIf="field.type === 'textarea'"
+        [formControlName]="field.name"
+        [placeholder]="placeholders[field.name]"
+      ></textarea>
 
-    <small *ngIf="form.get(field.name)?.invalid && form.get(field.name)?.touched">{{field.name}} is required</small>
+      <div class="error-messages" *ngIf="isInvalid(field.name)">
+        <small *ngIf="form.get(field.name)?.errors?.['required']">
+          {{ field.name | titlecase }} is required
+        </small>
+        <small *ngIf="form.get(field.name)?.errors?.['email']">
+          Please enter a valid email
+        </small>
+        <small *ngIf="form.get(field.name)?.errors?.['minlength']">
+          Minimum
+          {{
+            form.get(field.name)?.errors?.["minlength"]?.requiredLength
+          }}
+          characters required
+        </small>
+      </div>
+    </div>
   </ng-container>
-
   <button type="submit" [disabled]="!form.valid">{{ submitButtonText }}</button>
 </form>

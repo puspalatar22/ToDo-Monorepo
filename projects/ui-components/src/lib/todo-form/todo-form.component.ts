@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { FormConfig, Task } from 'models';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'ui-todo-form',
@@ -16,6 +17,8 @@ export class TodoFormComponent implements OnInit {
   form!: FormGroup;
   placeholders: Record<string, string> = {};
   submitButtonText: string = '';
+  
+    private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +35,12 @@ export class TodoFormComponent implements OnInit {
       this.buildForm();
       this.loadTranslations();
     }
+  }
+
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private buildForm() {
@@ -57,6 +66,11 @@ export class TodoFormComponent implements OnInit {
       this.submitButtonText = res;
     });
   }
+
+  isInvalid(fieldName: string): boolean {
+  const control = this.form.get(fieldName);
+  return !!(control && control.invalid && control.touched);
+}
 
   onSubmit() {
     if (this.form.valid) {

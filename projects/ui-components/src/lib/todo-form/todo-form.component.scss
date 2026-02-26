@@ -4,6 +4,13 @@ form {
   gap: 12px;
 }
 
+// ✅ wrapper for each field + its error message
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 input, textarea {
   padding: 10px 14px;
   border-radius: 8px;
@@ -15,6 +22,17 @@ input, textarea {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
+  // ✅ nested here so it overrides the base border above
+  &.input-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);  // ✅ red glow on error
+
+    &:focus {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
   }
 }
 
@@ -35,5 +53,23 @@ button {
 
   &:hover {
     background: var(--primary-dark);
+  }
+
+  &[type='submit']:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.error-messages {
+  small {
+    color: #ef4444;
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: block;
+
+    &::before {
+      content: '⚠ ';
+    }
   }
 }

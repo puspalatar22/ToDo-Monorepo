@@ -48,16 +48,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
     ngOnInit() {
-    // Show success toast when login succeeds
-    this.store.select(selectIsLoggedIn).pipe(
-      filter(Boolean),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.translate.get('LOGIN.SUCCESS').subscribe((msg: string) => {
-        this.toastService.show(msg, 'success');
-      });
-    });
-
     // Show error toast when login fails
     this.store.select(selectAuthError).pipe(
       filter(Boolean),                  

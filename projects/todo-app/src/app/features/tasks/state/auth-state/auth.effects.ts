@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { AuthService } from 'shared-services';
+import { AuthService, ToastService } from 'shared-services';
 import {
   login,
   loginFailure,
@@ -12,13 +12,16 @@ import {
   restoreSessionSuccess,
 } from './auth.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private actions$: Actions,
     @Inject(AuthService) private authService: AuthService,
-    private router: Router,
+    private router: Router,    
+        private translate: TranslateService,
+        private toastService: ToastService
   ) {}
 
   login$ = createEffect(() =>
@@ -41,6 +44,9 @@ export class AuthEffects {
         ofType(loginSuccess),
         tap(({ user }) => {
           this.authService.saveSession(user);
+           this.translate.get('LOGIN.SUCCESS').subscribe((msg: string) => {
+        this.toastService.show(msg, 'success');
+      });
           this.router.navigate(['/tasks']);
         }),
       ),
