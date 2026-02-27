@@ -6,28 +6,19 @@ button {
   font-size: 12px;
   transition: all 0.2s ease;
 
-  &.primary {
-    background-color: #2563eb;
-    color: #fff;
-    &:hover { background-color: #1e40af; }
-  }
+  // ─── Colors ────────────────────────────────────────────────────────────────
 
-  &.delete {
-    background-color: #dc2626;
-    color: #fff;
-    &:hover { background-color: #b91c1c; }
-  }
+  &.primary  { background-color: #2563eb; color: #fff; &:hover { background-color: #1e40af; } }
+  &.delete   { background-color: #dc2626; color: #fff; &:hover { background-color: #b91c1c; } }
+  &.edit     { background-color: #16a34a; color: #fff; &:hover { background-color: #15803d; } }
+  &.complete { background-color: #f59e0b; color: #fff; &:hover { background-color: #b45309; } }
 
-  &.edit {
-    background-color: #16a34a;
-    color: #fff;
-    &:hover { background-color: #15803d; }
-  }
+  // ─── Disabled ──────────────────────────────────────────────────────────────
 
-  &.complete {
-    background-color: #f59e0b;
-    color: #fff;
-    &:hover { background-color: #b45309; }
+  &:disabled,
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
   }
- 
 }

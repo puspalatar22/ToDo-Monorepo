@@ -9,6 +9,7 @@ export class TodoButtonComponent  {
 @Input() label='';
 @Input() color: 'primary' | 'edit' | 'delete' | 'complete' = 'primary';
 @Input() type : 'button' | 'submit' | 'reset' = 'button';
+@Input() disabled = false;
 @Output() click = new EventEmitter<MouseEvent>();
  @HostListener('click', ['$event'])
   onClick(event: MouseEvent) {

@@ -10,7 +10,7 @@ import {
   deleteTask,
   updateTask,
 } from '../state/task.actions';
-import { ToastService } from 'shared-services';
+import { ToastService, LanguageService } from 'shared-services';
 import { TranslateService } from '@ngx-translate/core';
 import { Validators } from '@angular/forms';
 import { logout } from '../state/auth-state/auth.actions';
@@ -22,7 +22,7 @@ import { logout } from '../state/auth-state/auth.actions';
 })
 export class TaskPageComponent implements OnInit {
   tasks$: Observable<Task[]> | undefined;
-  currentLang = 'en';
+  currentLang = this.languageService.currentLang;
   selectedTask: Task | null = null;
   showModal = false;
   showLogOutModal = false;
@@ -47,20 +47,18 @@ export class TaskPageComponent implements OnInit {
 
   constructor(
     private store: Store,
-    @Inject(ToastService) private toastService: ToastService,
     private translate: TranslateService,
-  ) {
-    this.translate.setDefaultLang('en');
-    this.translate.use(this.currentLang);
-  }
+    @Inject(ToastService) private toastService: ToastService,
+    @Inject(LanguageService)private languageService: LanguageService,
+  ) {  }
   ngOnInit(): void {
     this.tasks$ = this.store.select(selectAllTasks);
     this.store.dispatch(loadTasks());
   }
 
   switchLanguage() {
-    this.currentLang = this.currentLang === 'en' ? 'hi' : 'en';
-    this.translate.use(this.currentLang);
+    this.languageService.switchLanguage();
+    this.currentLang = this.languageService.currentLang;
   }
 
   openAddModal() {
@@ -90,7 +88,6 @@ export class TaskPageComponent implements OnInit {
   }
 
   confirmLogout() {
-    console.log('Logout clicked');
     this.showLogOutModal = false;
     this.store.dispatch(logout());
   }

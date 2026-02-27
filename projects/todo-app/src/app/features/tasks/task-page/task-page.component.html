@@ -65,6 +65,7 @@
               [label]="'TASK_LIST.EDIT' | translate"
               type="button"
               color="edit"
+               [disabled]="task.completed"
               (click)="openEditModal(task)"
             ></ui-todo-button>
 
