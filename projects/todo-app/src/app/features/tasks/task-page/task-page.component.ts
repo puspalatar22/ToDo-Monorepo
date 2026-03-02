@@ -26,6 +26,7 @@ export class TaskPageComponent implements OnInit {
   selectedTask: Task | null = null;
   showModal = false;
   showLogOutModal = false;
+  isChatOpen = false;
 
   todoFormConfig: FormConfig = {
     fields: [
@@ -55,6 +56,11 @@ export class TaskPageComponent implements OnInit {
     this.tasks$ = this.store.select(selectAllTasks);
     this.store.dispatch(loadTasks());
   }
+
+
+closeChat() {
+  this.isChatOpen = false;    // ✅ clicking overlay closes chat
+}
 
   switchLanguage() {
     this.languageService.switchLanguage();

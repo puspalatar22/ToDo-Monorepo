@@ -1,134 +1,115 @@
-<div class="container">
+<div class="page-wrapper">
 
-  <!-- Header -->
-  <div class="header">
-    <h2 class="title">{{ "TASK_LIST.TITLE" | translate }}</h2>
+  <!-- ✅ Blur overlay when chat is open -->
+  <div class="chat-overlay" *ngIf="isChatOpen" ></div>
 
-    <div>
-      <ui-todo-button  style="margin-right: 16px;"
-        [label]="(currentLang === 'en' ? 'TASK_LIST.TRANSLATE_HI' : 'TASK_LIST.TRANSLATE_EN') | translate"
-        type="button"
-        color="primary"
-        (click)="switchLanguage()"
-      ></ui-todo-button>
+  <div class="page-content" [class.blurred]="isChatOpen">
+    <div class="container">
 
-      <ui-todo-button style="margin-right: 16px;"
-        [label]="'TASK_LIST.ADD_NEW' | translate"
-        type="button"
-        color="primary"
-        (click)="openAddModal()"
-      ></ui-todo-button>
+      <!-- Header -->
+      <div class="header">
+        <h2>{{ "TASK_LIST.TITLE" | translate }}</h2>
+        <div class="header-actions">
+          <ui-todo-button
+            [label]="(currentLang === 'en' ? 'TASK_LIST.TRANSLATE_HI' : 'TASK_LIST.TRANSLATE_EN') | translate"
+            type="button" color="primary" (click)="switchLanguage()"
+         ></ui-todo-button>
+          <ui-todo-button
+            [label]="'TASK_LIST.ADD_NEW' | translate"
+            type="button" color="primary" (click)="openAddModal()"
+          ></ui-todo-button>
+          <ui-todo-button
+            [label]="'LOGOUT.TITLE' | translate"
+            type="button" color="primary" (click)="openLogoutModal()"
+          ></ui-todo-button>
+        </div>
+      </div>
 
-      <ui-todo-button
-        [label]="'LOGOUT.TITLE' | translate"
-        type="button"
-        color="primary"
-        (click)="openLogoutModal()"
-      ></ui-todo-button>
+      <!-- Task Table -->
+      <div class="table-wrapper">
+        <ng-container *ngIf="tasks$ | async as tasks">
+          <table class="task-table" *ngIf="tasks.length > 0; else emptyState">
+            <thead>
+              <tr>
+                <th>{{ "TASK_LIST.TITLE"       | translate }}</th>
+                <th>{{ "TASK_LIST.DESCRIPTION" | translate }}</th>
+                <th>{{ "TASK_LIST.STATUS"      | translate }}</th>
+                <th>{{ "TASK_LIST.CREATED"     | translate }}</th>
+                <th>{{ "TASK_LIST.ACTIONS"     | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of tasks" [class.completed]="task.completed">
+                <td>{{ task.title }}</td>
+                <td>{{ task.description || "—" }}</td>
+                <td>
+                  <span class="status" [class.done]="task.completed">
+                    {{ (task.completed ? "TASK_LIST.COMPLETED" : "TASK_LIST.PENDING") | translate }}
+                  </span>
+                </td>
+                <td>{{ task.createdAt | date: "short" }}</td>
+                <td class="actions">
+                  <ui-todo-button
+                    [label]="(task.completed ? 'TASK_LIST.UNDO' : 'TASK_LIST.COMPLETE') | translate"
+                    type="button" color="complete" (click)="toggleTask(task.id)"
+                 ></ui-todo-button>
+                  <ui-todo-button
+                    [label]="'TASK_LIST.EDIT' | translate"
+                    type="button" color="edit"
+                    [disabled]="task.completed"
+                    (click)="openEditModal(task)"
+                 ></ui-todo-button>
+                  <ui-todo-button
+                    [label]="'TASK_LIST.DELETE' | translate"
+                    type="button" color="delete" (click)="deleteTask(task.id)"
+                ></ui-todo-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ng-template #emptyState>
+            <div class="empty">{{ "TASK_LIST.NO_TASKS" | translate }}</div>
+          </ng-template>
+        </ng-container>
+      </div>
+
     </div>
   </div>
 
-  <!-- Task Table -->
-  <ng-container *ngIf="tasks$ | async as tasks">
-    <table class="task-table" *ngIf="tasks.length > 0; else emptyState">
-      <thead>
-        <tr>
-          <th>{{ "TASK_LIST.TITLE"       | translate }}</th>
-          <th>{{ "TASK_LIST.DESCRIPTION" | translate }}</th>
-          <th>{{ "TASK_LIST.STATUS"      | translate }}</th>
-          <th>{{ "TASK_LIST.CREATED"     | translate }}</th>
-          <th>{{ "TASK_LIST.ACTIONS"     | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of tasks" [class.completed]="task.completed">
-          <td>{{ task.title }}</td>
-          <td>{{ task.description || "—" }}</td>
-
-          <td>
-            <span class="status" [class.done]="task.completed">
-              {{ (task.completed ? "TASK_LIST.COMPLETED" : "TASK_LIST.PENDING") | translate }}
-            </span>
-          </td>
-
-          <td>{{ task.createdAt | date: "short" }}</td>
-
-          <td class="actions">
-            <ui-todo-button
-              [label]="(task.completed ? 'TASK_LIST.UNDO' : 'TASK_LIST.COMPLETE') | translate"
-              type="button"
-              color="complete"
-              (click)="toggleTask(task.id)"
-            ></ui-todo-button>
-
-            <ui-todo-button
-              [label]="'TASK_LIST.EDIT' | translate"
-              type="button"
-              color="edit"
-               [disabled]="task.completed"
-              (click)="openEditModal(task)"
-            ></ui-todo-button>
-
-            <ui-todo-button
-              [label]="'TASK_LIST.DELETE' | translate"
-              type="button"
-              color="delete"
-              (click)="deleteTask(task.id)"
-            ></ui-todo-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <ng-template #emptyState>
-      <div class="empty">{{ "TASK_LIST.NO_TASKS" | translate }}</div>
-    </ng-template>
-  </ng-container>
-
-  <!-- Modal -->
+  <!-- Task Modal -->
   <ng-container *ngIf="showModal">
-
-    <!-- Backdrop -->
-    <div class="backdrop" ></div>
-
-    <!-- Modal Panel -->
+    <div class="backdrop"></div>
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modal-content" (click)="$event.stopPropagation()">
-
         <div class="modal-header">
           <h3>{{ (selectedTask ? "TASK_LIST.EDIT" : "TASK_LIST.ADD_NEW") | translate }}</h3>
           <button class="close-btn" (click)="closeModal()" aria-label="Close">×</button>
         </div>
-
         <ui-todo-form
           [config]="todoFormConfig"
           [initialValues]="selectedTask ?? {}"
           (submitForm)="handleSaveTask($event)"
         ></ui-todo-form>
-
       </div>
     </div>
-
   </ng-container>
 
-
-  <!-- logOut Modal -->
-<ng-container *ngIf="showLogOutModal">
-  <div class="logout-modal-backdrop">
-    <div class="logout-modal-card" (click)="$event.stopPropagation()">
-      <h2>{{ "LOGOUT.TITLE" | translate }}</h2>
-      <p>{{ "LOGOUT.MESSAGE" | translate }}</p>
-
-      <div class="logout-modal-actions">
-        <button class="btn-secondary" (click)="cancelLogout()">
-          {{ "LOGOUT.NO" | translate }}
-        </button>
-        <button class="btn-danger" (click)="confirmLogout()">
-          {{ "LOGOUT.YES" | translate }}
-        </button>
+  <!-- Logout Modal -->
+  <ng-container *ngIf="showLogOutModal">
+    <div class="logout-modal-backdrop">
+      <div class="logout-modal-card" (click)="$event.stopPropagation()">
+        <h2>{{ "LOGOUT.TITLE" | translate }}</h2>
+        <p>{{ "LOGOUT.MESSAGE" | translate }}</p>
+        <div class="logout-modal-actions">
+          <button class="btn-secondary" (click)="cancelLogout()">{{ "LOGOUT.NO"  | translate }}</button>
+          <button class="btn-danger"    (click)="confirmLogout()">{{ "LOGOUT.YES" | translate }}</button>
+        </div>
       </div>
     </div>
-  </div>
-</ng-container>
+  </ng-container>
+
+  <!-- ✅ Chatbot always at bottom -->
+  <app-chatbot (chatToggled)="isChatOpen = $event" ></app-chatbot>
 
 </div>

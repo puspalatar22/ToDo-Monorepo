@@ -195,6 +195,106 @@
           }
         }
       }
+    },
+    "login-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/login-app",
+      "sourceRoot": "projects/login-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/login-app",
+            "index": "projects/login-app/src/index.html",
+            "main": "projects/login-app/src/main.ts",
+            "polyfills": "projects/login-app/src/polyfills.ts",
+            "tsConfig": "projects/login-app/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/login-app/src/favicon.ico",
+              "projects/login-app/src/assets"
+            ],
+            "styles": [
+              "projects/login-app/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/login-app/src/environments/environment.ts",
+                  "with": "projects/login-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "login-app:build:production"
+            },
+            "development": {
+              "browserTarget": "login-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "login-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/login-app/src/test.ts",
+            "polyfills": "projects/login-app/src/polyfills.ts",
+            "tsConfig": "projects/login-app/tsconfig.spec.json",
+            "karmaConfig": "projects/login-app/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/login-app/src/favicon.ico",
+              "projects/login-app/src/assets"
+            ],
+            "styles": [
+              "projects/login-app/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
     }
   },
   "cli": {

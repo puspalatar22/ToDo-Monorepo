@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -11,14 +11,17 @@ import { TasksRoutingModule } from './tasks-routing.module';
 import { TaskPageComponent } from './task-page/task-page.component';
 import { taskReducer } from './state/task.reducer';
 import { TaskEffects } from './state/task.effects';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 @NgModule({
   declarations: [
-    TaskPageComponent    
+    TaskPageComponent,
+    ChatbotComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     TranslateModule,
     UiComponentsModule,
     TasksRoutingModule,  

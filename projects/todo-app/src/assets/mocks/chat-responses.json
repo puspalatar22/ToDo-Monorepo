@@ -1,0 +1,57 @@
+{
+  "responses": [
+    {
+      "keywords": ["tier-1", "tier 1", "tier1", "cities"],
+      "answer": "Mumbai, Delhi/NCR, Kolkata, Chennai, Bangalore, Hyderabad, Pune, Ahmedabad, Surat, Jaipur, Chandigarh.",
+      "image_urls": [],
+      "sources": [
+        {
+          "title": "ESSPL Business Travel Policy- April 24 (1) 1 1",
+          "section_title": "A4 & A5",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        },
+        {
+          "title": "ESSPL Business Travel Policy- April 24 (1) 1 1",
+          "section_title": "A (A1-A5)",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        }
+      ]
+    },
+    {
+      "keywords": ["travel policy", "business travel"],
+      "answer": "The ESSPL Business Travel Policy outlines guidelines for domestic and international travel including tier classifications, allowances, and approval processes.",
+      "image_urls": [],
+      "sources": [
+        {
+          "title": "ESSPL Business Travel Policy- April 24 (1) 1 1",
+          "section_title": "Page 1",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        }
+      ]
+    },
+    {
+      "keywords": ["hello", "hi", "hey"],
+      "answer": "Hello! I'm your assistant. You can ask me about travel policy, tier cities and more.",
+      "image_urls": [],
+      "sources": []
+    },
+    {
+      "keywords": ["help"],
+      "answer": "You can ask me about: tier-1 cities, travel policy, allowances, approvals, or any policy related questions.",
+      "image_urls": [],
+      "sources": []
+    },
+    {
+      "keywords": ["default"],
+      "answer": "I'm not sure about that. Please try rephrasing or type 'help' to see what I can answer.",
+      "image_urls": [],
+      "sources": []
+    }
+  ]
+}

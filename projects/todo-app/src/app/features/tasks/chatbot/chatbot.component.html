@@ -1,0 +1,83 @@
+ <!-- Chat Icon -->
+<div *ngIf="!state?.isOpen" class="chat-icon" (click)="toggleChat()">
+   <img src="assets/images/chatbot.png" alt="chatbot-image" class="robot-emoji">
+  <span class="chat-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+</div>
+
+<!-- Overlay & Chat Window  -->
+<div *ngIf="state?.isOpen" class="chat-overlay" (click)="toggleChat()">
+  <div class="chat-window" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <img src="assets/images/chatbot.png" alt="chatbot-image" class="header-emoji">
+        <div>
+          <span class="header-title">Task Assistant</span>
+          <span class="header-status">● Online</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="toggleChat()">✕</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" #messageContainer>
+      <div
+        *ngFor="let message of state.messages"
+        class="message"
+        [class.user]="message.sender === 'user'"
+        [class.bot]="message.sender === 'bot'"
+      >
+        <img
+          class="bot-avatar"
+          [src]="
+            message.sender === 'bot'
+              ? 'assets/images/bot.png'
+              : 'assets/images/userImg.png'
+          "
+          [alt]="message.sender === 'bot' ? 'Bot' : 'User'"
+        />
+
+        <div class="message-content">
+          <span class="bubble">{{ message.text }}</span>
+
+          <!-- Sources -->
+          <div class="sources" *ngIf="message.sources?.length">
+            <small class="sources-label">Sources:</small>
+            <div class="source-item" *ngFor="let source of message.sources">
+              <a [href]="source.url" target="_blank">
+                📄 {{ source.title }} — {{ source.section_title }}
+              </a>
+            </div>
+          </div>
+
+          <small class="timestamp">{{
+            message.timeStamp | date: "shortTime"
+          }}</small>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="message bot" *ngIf="state.isTyping">
+        <img class="bot-avatar" src="assets/images/bot.png" alt="Bot" />
+        <div class="message-content">
+          <span class="bubble typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="inputText"
+        placeholder="Type a message..."
+        (keydown)="handleKeyDown($event)"
+      />
+      <button (click)="sendMessage()" [disabled]="!inputText.trim()">➤</button>
+    </div>
+  </div>
+</div>
