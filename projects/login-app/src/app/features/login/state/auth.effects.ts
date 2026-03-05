@@ -38,20 +38,24 @@ export class AuthEffects {
     ),
   );
 
-  loginSuccess$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(loginSuccess),
-        tap(({ user }) => {
-          this.authService.saveSession(user);
-           this.translate.get('LOGIN.SUCCESS').subscribe((msg: string) => {
-        this.toastService.show(msg, 'success');
-      });
-          this.router.navigate(['/tasks']);
-        }),
-      ),
-    { dispatch: false },
-  );
+loginSuccess$ = createEffect(
+  () =>
+    this.actions$.pipe(
+      ofType(loginSuccess),
+      tap(({ user }) => {
+        // Save session in login-app localStorage
+        this.authService.saveSession(user);
+
+        // Show success toast
+        this.translate.get('LOGIN.SUCCESS').subscribe((msg: string) => {
+          this.toastService.show(msg, 'success');
+        });
+          const todoAppUrl = `http://localhost:4200/tasks`;
+        window.location.href = todoAppUrl;
+      }),
+    ),
+  { dispatch: false },
+);
 
   logout$ = createEffect(
     () =>

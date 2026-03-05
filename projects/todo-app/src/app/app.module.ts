@@ -11,8 +11,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { UiComponentsModule } from 'projects/ui-components/src/public-api';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AuthModule } from './auth/auth.module';
-import { authReducer } from './features/tasks/state/auth-state/auth.reducer';
+import { SharedI18nModule } from 'shared-i18n';
+import { RouterOutlet } from '@angular/router';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -21,9 +21,10 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    RouterOutlet,
     AppRoutingModule,
     HttpClientModule,
-
+    SharedI18nModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
@@ -32,10 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
-    AuthModule,
-    StoreModule.forRoot({
-      auth: authReducer,
-    }),
+    StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,

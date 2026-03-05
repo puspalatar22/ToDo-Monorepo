@@ -4,19 +4,21 @@ import { FormConfig } from 'models';
 import { Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService } from 'shared-services';
-import { login } from '../../features/tasks/state/auth-state/auth.actions';
-import { selectAuthError } from '../../features/tasks/state/auth-state/auth.selector';
+import { login } from '../../state/auth.actions';
+import { selectAuthError } from '../../state/auth.selector';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { LanguageService } from 'shared-services';
+import { LanguageService } from 'shared-i18n';
+
 @Component({
   selector: 'app-login-page',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  currentLang = this.languageService.currentLang;
+
+  currentLang!: string;
 
   loginFormConfig: FormConfig = {
     fields: [
@@ -40,11 +42,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private translate: TranslateService,
-    @Inject(ToastService) private toastService: ToastService,
-    @Inject(LanguageService) private languageService: LanguageService,
+    private toastService: ToastService,
+    private languageService: LanguageService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    // Initialize current language
+    this.currentLang = this.languageService.currentLang();
+
     // Show error toast when login fails
     this.store
       .select(selectAuthError)
@@ -56,20 +61,27 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
-  switchLanguage() {
-    this.languageService.switchLanguage();
-    this.currentLang = this.languageService.currentLang;
+  /**
+   * Toggle language between 'en' and 'hi'
+   */
+  switchLanguage(): void {
+    const newLang = this.currentLang === 'en' ? 'hi' : 'en';
+    this.languageService.switchLanguage(newLang);
+    this.currentLang = newLang;
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  handleLogin(formValue: Record<string, any>) {
+  /**
+   * Dispatch login action with form values
+   */
+  handleLogin(formValue: Record<string, any>): void {
     const email = formValue['email'] as string;
     const password = formValue['password'] as string;
 
     this.store.dispatch(login({ email, password }));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

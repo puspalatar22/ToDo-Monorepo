@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { loadTasks } from './features/tasks/state/task.actions';
-import { restoreSession } from './features/tasks/state/auth-state/auth.actions';
+import { LanguageService } from 'shared-i18n';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +8,11 @@ import { restoreSession } from './features/tasks/state/auth-state/auth.actions';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  constructor(private store: Store){}
+  constructor(private store: Store, private langService: LanguageService){}
 
   ngOnInit(){
-    this.store.dispatch(restoreSession());
+    // this.store.dispatch(restoreSession());
+    this.langService.init();
   }
   title = 'todo-app';
 }

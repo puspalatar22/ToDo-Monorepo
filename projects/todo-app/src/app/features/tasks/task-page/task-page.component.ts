@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { FormConfig, Task } from 'models';
 import { Observable } from 'rxjs';
 import { selectAllTasks } from '../state/task.selector';
+import { LanguageService } from 'shared-i18n';
 import {
   addTask,
   loadTasks,
@@ -10,10 +11,10 @@ import {
   deleteTask,
   updateTask,
 } from '../state/task.actions';
-import { ToastService, LanguageService } from 'shared-services';
+import { AuthService, ToastService } from 'shared-services';
 import { TranslateService } from '@ngx-translate/core';
 import { Validators } from '@angular/forms';
-import { logout } from '../state/auth-state/auth.actions';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task-page',
@@ -22,7 +23,7 @@ import { logout } from '../state/auth-state/auth.actions';
 })
 export class TaskPageComponent implements OnInit {
   tasks$: Observable<Task[]> | undefined;
-  currentLang = this.languageService.currentLang;
+  currentLang!: string;
   selectedTask: Task | null = null;
   showModal = false;
   showLogOutModal = false;
@@ -53,6 +54,7 @@ export class TaskPageComponent implements OnInit {
     @Inject(LanguageService)private languageService: LanguageService,
   ) {  }
   ngOnInit(): void {
+    this.currentLang = this.languageService.currentLang();
     this.tasks$ = this.store.select(selectAllTasks);
     this.store.dispatch(loadTasks());
   }
@@ -62,10 +64,12 @@ closeChat() {
   this.isChatOpen = false;    // ✅ clicking overlay closes chat
 }
 
-  switchLanguage() {
-    this.languageService.switchLanguage();
-    this.currentLang = this.languageService.currentLang;
-  }
+switchLanguage() {
+  const newLang = this.currentLang === 'en' ? 'hi' : 'en';
+
+  this.languageService.switchLanguage(newLang);
+  this.currentLang = this.languageService.currentLang();
+}
 
   openAddModal() {
     this.selectedTask = null;
@@ -95,7 +99,7 @@ closeChat() {
 
   confirmLogout() {
     this.showLogOutModal = false;
-    this.store.dispatch(logout());
+    // this.store.dispatch(logout());
   }
 
   closeModal() {

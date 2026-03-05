@@ -28,6 +28,9 @@
     "dist/models",                              
     "projects/models/src/public-api.ts"        
   ],
+  "shared-i18n": [
+    "dist/shared-i18n"
+  ],
   "shared-services": [
     "dist/shared-services",
     "projects/shared-services/src/public-api.ts"
@@ -35,7 +38,7 @@
   "ui-components": [
     "dist/ui-components",
     "projects/ui-components/src/public-api.ts"
-  ]
+  ],
 }
   },
   "angularCompilerOptions": {
