@@ -11,7 +11,6 @@ export class AppComponent implements OnInit{
   constructor(private store: Store, private langService: LanguageService){}
 
   ngOnInit(){
-    // this.store.dispatch(restoreSession());
     this.langService.init();
   }
   title = 'todo-app';

@@ -97,10 +97,16 @@ switchLanguage() {
     this.showLogOutModal = false;
   }
 
-  confirmLogout() {
-    this.showLogOutModal = false;
-    // this.store.dispatch(logout());
-  }
+confirmLogout() {
+  this.showLogOutModal = false;
+
+  // remove auth cookie
+  document.cookie =
+    "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+  // redirect to login app
+  window.location.href = "http://localhost:61875/login";
+}
 
   closeModal() {
     this.showModal = false;

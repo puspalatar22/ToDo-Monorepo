@@ -19,9 +19,9 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     @Inject(AuthService) private authService: AuthService,
-    private router: Router,    
-        private translate: TranslateService,
-        private toastService: ToastService
+    private router: Router,
+    private translate: TranslateService,
+    private toastService: ToastService,
   ) {}
 
   login$ = createEffect(() =>
@@ -38,36 +38,20 @@ export class AuthEffects {
     ),
   );
 
-loginSuccess$ = createEffect(
-  () =>
-    this.actions$.pipe(
-      ofType(loginSuccess),
-      tap(({ user }) => {
-        // Save session in login-app localStorage
-        this.authService.saveSession(user);
-
-        // Show success toast
-        this.translate.get('LOGIN.SUCCESS').subscribe((msg: string) => {
-          this.toastService.show(msg, 'success');
-        });
-          const todoAppUrl = `http://localhost:4200/tasks`;
-        window.location.href = todoAppUrl;
-      }),
-    ),
-  { dispatch: false },
-);
-
-  logout$ = createEffect(
+  loginSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(logout),
-        tap(() => {
-          this.authService.clearSession();
+        ofType(loginSuccess),
+        tap(({ user }) => {
+          // Save session in login-app localStorage
+          this.authService.saveSession(user);
 
-          // ✅ Only navigate if not already on login
-          if (!this.router.url.includes('/login')) {
-            this.router.navigate(['/login']);
-          }
+          // Show success toast
+          this.translate.get('LOGIN.SUCCESS').subscribe((msg: string) => {
+            this.toastService.show(msg, 'success');
+          });
+          document.cookie = 'isLoggedIn=true; path=/';
+          window.location.href = 'http://localhost:4200/tasks';
         }),
       ),
     { dispatch: false },

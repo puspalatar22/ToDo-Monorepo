@@ -11,6 +11,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { SharedI18nModule } from 'shared-i18n';
+import { RouterOutlet } from '@angular/router';
 
 // Translate loader factory
 export function HttpLoaderFactory(http: HttpClient) {
@@ -24,6 +25,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AppRoutingModule,
 SharedI18nModule,
+RouterOutlet,
     // Root store module
     StoreModule.forRoot({}, {}),           // provide empty object if no global reducers yet
     EffectsModule.forRoot([]),             // provide empty array if no root effects
