@@ -1,10 +1,6 @@
 <!-- Chat Icon -->
 <div *ngIf="!state?.isOpen" class="chat-icon" (click)="toggleChat()">
-  <img
-    src="assets/images/chatbot.png"
-    alt="chatbot-image"
-    class="robot-emoji"
-  />
+  <img src="assets/images/chatbot.png" alt="chatbot-image" class="robot-emoji" />
   <span class="chat-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
 </div>
 
@@ -14,11 +10,7 @@
     <!-- Header -->
     <div class="chat-header">
       <div class="chat-header-info">
-        <img
-          src="assets/images/chatbot.png"
-          alt="chatbot-image"
-          class="header-emoji"
-        />
+        <img src="assets/images/chatbot.png" alt="chatbot-image" class="header-emoji" />
         <div>
           <span class="header-title">Task Assistant</span>
           <span class="header-status">● Online</span>
@@ -29,24 +21,16 @@
 
     <!-- Messages -->
     <div class="chat-messages" #messageContainer>
-      <div
-        *ngFor="let message of state.messages"
-        class="message"
-        [class.user]="message.sender === 'user'"
-        [class.bot]="message.sender === 'bot'"
-      >
-        <img
-          class="bot-avatar"
-          [src]="
+      <div *ngFor="let message of state.messages" class="message" [class.user]="message.sender === 'user'"
+        [class.bot]="message.sender === 'bot'">
+        <img class="bot-avatar" [src]="
             message.sender === 'bot'
               ? 'assets/images/bot.png'
               : 'assets/images/userImg.png'
-          "
-          [alt]="message.sender === 'bot' ? 'Bot' : 'User'"
-        />
+          " [alt]="message.sender === 'bot' ? 'Bot' : 'User'" />
 
         <div class="message-content">
-          <span class="bubble">{{ message.text }}</span>
+          <span class="bubble" [innerHTML]="parseMarkdown(message.text)"></span>
 
           <!-- Sources -->
           <div class="sources" *ngIf="message.sources?.length">
@@ -60,7 +44,7 @@
 
           <small class="timestamp">{{
             message.timeStamp | date: "shortTime"
-          }}</small>
+            }}</small>
         </div>
       </div>
 
@@ -79,18 +63,10 @@
 
     <!-- Input -->
     <div class="chat-input">
-      <input
-        type="text"
-        [(ngModel)]="inputText"
-        placeholder="Type a message..."
-        (keydown)="handleKeyDown($event)"
-      />
-      <button type="button" (click)="startListening()" [ngClass]="!isListening? 'isListening' : 'notListening'">
-        <img
-          class="mic-btn"
-          src="assets/images/mic.png"
-          alt="mic-icon"
-        />
+      <input type="text" [(ngModel)]="inputText" placeholder="Type a message..." (keydown)="handleKeyDown($event)" />
+      <button *ngIf="isSpeechRecognitionSupported" type="button" (click)="startListening()"
+        [class.listening]="isListening">
+        <img class="mic-btn" src="assets/images/mic.png" alt="mic-icon" />
       </button>
       <button (click)="sendMessage()" [disabled]="!inputText.trim()">➤</button>
     </div>

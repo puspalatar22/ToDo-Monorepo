@@ -9,10 +9,12 @@ import {
   Output,
   Input,
   HostListener,
+  NgZone,
 } from '@angular/core';
 import { ChatState } from 'models';
 import { ChatService } from 'shared-services';
 import { Subject, takeUntil } from 'rxjs';
+import { marked } from 'marked';
 
 @Component({
   selector: 'app-chatbot',
@@ -26,17 +28,22 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
   @Output() toggle = new EventEmitter<boolean>();
   @Output() clickOutside = new EventEmitter<void>();
+  parseMarkdown(md: string): string {
+    return marked.parse(md) as string;
+  }
 
   state!: ChatState;
   inputText = '';
   private destroy$ = new Subject<void>();
   private recognition: any;
   isListening = false;
+  isSpeechRecognitionSupported = false; 
 
   constructor(
     @Inject(ChatService) private chatService: ChatService,
     private el: ElementRef,
-  ) {}
+    private ngZone: NgZone
+  ) { }
 
   unreadCount = 0;
 
@@ -45,39 +52,49 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition;
 
+       this.isSpeechRecognitionSupported = !!SpeechRecognition;
+
     if (SpeechRecognition) {
       this.recognition = new SpeechRecognition();
       this.recognition.lang = 'en-IN';
-      this.recognition.continuous = false; //stop after one sentence
-      this.recognition.interimResults = true; //show live typing
+      this.recognition.continuous = false; 
+      this.recognition.interimResults = true;
 
-      this.recognition.onresult = (event: any) => {
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            const transcript = event.results[i][0].transcript;
-
-            this.inputText = (this.inputText + ' ' + transcript).trim();
-          }
-        }
-      };
-
-      this.recognition.onStart = () => {
-        this.isListening = true;
+      this.recognition.onstart = () => {
+        this.ngZone.run(() => {
+          this.isListening = true;
+        });
       };
 
       this.recognition.onend = () => {
-        this.isListening = false;
+        this.ngZone.run(() => {
+          this.isListening = false;
+        });
       };
 
       this.recognition.onerror = () => {
-        this.isListening = false;
+        this.ngZone.run(() => {
+          this.isListening = false;
+        });
+      };
+
+      this.recognition.onresult = (event: any) => {
+        this.ngZone.run(() => {
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+              this.inputText = (this.inputText + ' ' + result[0].transcript).trim();
+              this.sendMessage();
+            }
+          }
+        });
       };
     }
 
     this.chatService.state$
       .pipe(takeUntil(this.destroy$))
       .subscribe((state: ChatState) => {
-        // ✅ increment unread when chat is closed and bot replies
+        // increment unread when chat is closed and bot replies
         if (
           !state.isOpen &&
           state.messages.length > this.state?.messages?.length
@@ -88,7 +105,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
           }
         }
 
-        // ✅ reset unread when chat opens
+        // reset unread when chat opens
         if (state.isOpen) this.unreadCount = 0;
 
         this.state = state;
@@ -109,8 +126,6 @@ export class ChatbotComponent implements OnInit, OnDestroy {
     this.toggleListening();
     if (this.recognition) {
       this.recognition.start();
-    } else {
-      alert('Your browser does not support speech recognition.');
     }
   }
 

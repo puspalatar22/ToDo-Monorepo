@@ -13,6 +13,7 @@ import { UiComponentsModule } from 'projects/ui-components/src/public-api';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SharedI18nModule } from 'shared-i18n';
 import { RouterOutlet } from '@angular/router';
+import { MarkdownModule } from 'ngx-markdown';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -35,6 +36,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
+    MarkdownModule.forRoot(),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,

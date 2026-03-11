@@ -1,0 +1,90 @@
+{
+  "responses": [
+    {
+      "keywords": ["tier-1", "tier 1", "tier1", "cities", "tier cities"],
+      "answer": "### Tier-1 Cities\n\nThe following cities are classified as **Tier-1** under the ESSPL Business Travel Policy.\n\n| City | Tier |\n|-----|------|\n| Mumbai | Tier-1 |\n| Delhi / NCR | Tier-1 |\n| Kolkata | Tier-1 |\n| Chennai | Tier-1 |\n| Bangalore | Tier-1 |\n| Hyderabad | Tier-1 |\n| Pune | Tier-1 |\n| Ahmedabad | Tier-1 |\n| Surat | Tier-1 |\n| Jaipur | Tier-1 |\n| Chandigarh | Tier-1 |\n\n## City Tier Illustration\n\n![Tier Cities](https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/India_Administrative_Map.svg/640px-India_Administrative_Map.svg.png)\n\nYou can refer to the **official travel policy document** for more details.",
+      "image_urls": [],
+      "sources": [
+        {
+          "title": "**ESSPL Business Travel Policy – April 2024**",
+          "section_title": "### Section A4 & A5 – Tier Classification",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        },
+        {
+          "title": "**ESSPL Business Travel Policy – April 2024**",
+          "section_title": "### Section A (A1–A5)",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        }
+      ]
+    },
+
+    {
+      "keywords": ["travel policy", "business travel", "travel guidelines"],
+      "answer": "### ESSPL Business Travel Policy\n\nThe **ESSPL Business Travel Policy** outlines guidelines for both **domestic and international travel**.\n\n## Key Policy Areas\n\n- Travel tier classification\n- City tier rules\n- Travel approvals\n- Expense reimbursement\n- Allowances during travel\n\n## Policy Overview\n\n| Category | Description |\n|---------|-------------|\n| Travel Type | Domestic / International |\n| Approval | Manager Approval Required |\n| Reimbursement | Expense Portal Submission |\n| Documents | Receipts Required |\n\n![Business Travel](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Airplane_silhouette.svg/640px-Airplane_silhouette.svg.png)\n\nFor full policy details refer to the official document.",
+      "image_urls": [],
+      "sources": [
+        {
+          "title": "**ESSPL Business Travel Policy – April 2024**",
+          "section_title": "### Page 1 – Policy Overview",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        }
+      ]
+    },
+
+    {
+      "keywords": ["travel approval", "who approves travel", "travel authorization"],
+      "answer": "### Travel Approval Process\n\nBefore booking any travel, **approval is required**.\n\n## Approval Workflow\n\n1. Employee submits travel request\n2. Reporting manager reviews the request\n3. Finance verifies budget\n4. Travel desk confirms booking\n\n| Step | Responsible Team |\n|-----|------------------|\n| Request Submission | Employee |\n| Approval | Reporting Manager |\n| Budget Check | Finance |\n| Booking | Travel Desk |\n\n![Approval Workflow](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Flowchart_example.svg/640px-Flowchart_example.svg.png)",
+      "image_urls": [],
+      "sources": [
+        {
+          "title": "**ESSPL Business Travel Policy – April 2024**",
+          "section_title": "### Travel Approval Process",
+          "page_id": "doc_20260226_063000",
+          "url": "frontend/public/attachments/PDF/20260226_063000.pdf",
+          "images": []
+        }
+      ]
+    },
+
+    {
+      "keywords": ["travel allowance", "allowances", "daily allowance"],
+      "answer": "# Travel Allowances\n\nEmployees traveling for official purposes may receive **allowances**.\n\n## Allowance Types\n\n| Allowance Type | Description |\n|----------------|-------------|\n| Accommodation | Hotel stay during travel |\n| Meals | Food expenses during travel |\n| Transport | Local transportation |\n\nThese allowances may vary depending on:\n\n- Employee designation\n- City tier\n- Duration of travel\n\n![Allowance](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Wallet.svg/640px-Wallet.svg.png)",
+      "image_urls": [],
+      "sources": []
+    },
+
+    {
+      "keywords": ["hello", "hi", "hey", "good morning"],
+      "answer": "### Hello 👋\n\nWelcome! I am **Bot**.\n\nYou can ask me questions about:\n\n- Business travel policy\n- Tier-1 cities\n- Travel approvals\n- Travel allowances\n- Expense reimbursement\n\nJust type your question and I'll help you.",
+      "image_urls": [],
+      "sources": []
+    },
+
+    {
+      "keywords": ["help", "what can you do", "support"],
+      "answer": "### Help Menu\n\nHere are some questions you can ask:\n\n| Example Questions |\n|------------------|\n| What are Tier-1 cities? |\n| What is the business travel policy? |\n| Who approves travel? |\n| What travel allowances are available? |\n\nYou can type any **policy related question** and I will try to assist.",
+      "image_urls": [],
+      "sources": []
+    },
+
+    {
+      "keywords": ["reimbursement", "travel expenses", "expense claim"],
+      "answer": "### Travel Expense Reimbursement\n\nEmployees can claim reimbursement for travel related expenses.\n\n## Eligible Expenses\n\n| Expense Type | Example |\n|--------------|---------|\n| Flights | Air tickets |\n| Hotels | Accommodation |\n| Transport | Taxi / Cab |\n| Meals | Food during travel |\n\n### Important\n\n- Keep **all receipts**\n- Submit claims in the **expense portal**\n- Claims must be approved by the manager",
+      "image_urls": [],
+      "sources": []
+    },
+
+    {
+      "keywords": ["default"],
+      "answer": "### Sorry 🤔\n\nI couldn't find an answer for that question.\n\n### Try asking something like:\n\n- What are Tier-1 cities?\n- What is the travel policy?\n- Who approves travel?\n- What allowances are provided?\n\nOr type **help** to see available questions.",
+      "image_urls": [],
+      "sources": []
+    }
+  ]
+}

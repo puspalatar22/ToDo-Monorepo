@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ChatResponse } from 'models';
-import { ChatMessage } from 'models';
-import { ChatState } from 'models';
+import { ChatMessage, ChatState } from 'models';
 import { BehaviorSubject } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import * as marked from 'marked';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  private readonly url = 'assets/mocks/chat-responses.json';
+  private readonly url = 'assets/mocks/chat-markdown-responses.json';
 
   private state: ChatState = {
     messages: [],
@@ -20,58 +20,52 @@ export class ChatService {
 
   private mockData: any[] = [];
   private dataloaded = false;
-  private pendingText: string |null = null;
+  private pendingText: string | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {
     this.loadMockdata();
   }
 
   private loadMockdata() {
     this.http.get<{ responses: any[] }>(this.url).subscribe({
       next: (data) => {
-        this.mockData  = data.responses;   
+        this.mockData = data.responses;
         this.dataloaded = true;
-
         if (this.pendingText) {
           this.respondToMessage(this.pendingText);
           this.pendingText = null;
         }
       },
-      error: (err) => console.error('Failed to load mock data:', err)
+      error: (err) => console.error('Failed to load mock data:', err),
     });
   }
 
   toggleChat() {
     this.updateState({ isOpen: !this.state.isOpen });
-
     if (this.state.isOpen && this.state.messages.length === 0) {
-      this.addMessage({
-        text: "Hello, I'm a bot. How can I help you today?",
-        sender: 'bot',
-      });
+      this.addMessage({ text: "Hello, I'm a bot. How can I help you today?" });
     }
   }
 
-sendMessage(userText: string) {
-  if (!userText.trim()) return;
+  sendMessage(userText: string) {
+    if (!userText.trim()) return;
 
-  // user message
-  this.addMessage({ text: userText, sender: 'user' });
-  console.log(this.addMessage);
+    // Add user message
+    this.addMessage({ text: userText, sender: 'user' });
+    this.updateState({ isTyping: true });
 
-  this.updateState({ isTyping: true });
+    setTimeout(() => {
+      this.updateState({ isTyping: false });
 
-  setTimeout(() => {
-    this.updateState({ isTyping: false });
+      if (!this.dataloaded) {
+        this.pendingText = userText.toLowerCase();
+        this.addMessage({ text: 'Loading Responses, Please wait...', sender: 'bot' });
+        return;
+      }
 
-    if(!this.dataloaded){
-      this.pendingText = userText.toLowerCase();
-      this.addMessage({text: 'Loading Responses, Please wait...', sender: 'bot'});
-      return;
-    }
-    this.respondToMessage(userText.toLowerCase());
-  }, 800);
-}
+      this.respondToMessage(userText.toLowerCase());
+    }, 800);
+  }
 
   private addMessage(partial: Partial<ChatMessage>) {
     const message: ChatMessage = {
@@ -84,8 +78,8 @@ sendMessage(userText: string) {
     };
 
     this.updateState({
-        messages: [...this.state.messages, message]
-    })
+      messages: [...this.state.messages, message],
+    });
   }
 
   private updateState(partial: Partial<ChatState>) {
@@ -93,19 +87,37 @@ sendMessage(userText: string) {
     this.stateSubject.next(this.state);
   }
 
-private respondToMessage(text: string) {
-  const matched = this.mockData.find((r) =>
-    r.keywords.some((k: string) => text.includes(k))
-  );
+  private respondToMessage(text: string) {
+    const matched = this.mockData.find((r) =>
+      r.keywords.some((k: string) => text.includes(k))
+    );
 
-  const response = matched ?? this.mockData.find((r) => r.keywords.includes('default'));
+    const response =
+      matched ?? this.mockData.find((r) => r.keywords.includes('default'));
 
-  // bot message
-  this.addMessage({
-    text     : response.answer,
-    sender   : 'bot',           
-    sources  : response.sources,
-    imageUrls: response.image_urls,
-  });
+    if (!response) return;
+
+    // Merge Markdown images in text and any imageUrls array
+    let combinedText = response.answer;
+
+    // Append extra images at the bottom if any
+    if (response.image_urls?.length) {
+      response.image_urls.forEach((url: string) => {
+        combinedText += `\n\n![image](${url})`;
+      });
+    }
+
+    // Add bot message
+    this.addMessage({
+      text: combinedText,
+      sender: 'bot',
+      sources: response.sources,
+    });
+  }
+
+  // Convert Markdown to HTML safely
+parseMarkdown(markdownText: string): SafeHtml {
+  const html = marked.parse(markdownText || '') as string;
+  return this.sanitizer.bypassSecurityTrustHtml(html);
 }
 }
