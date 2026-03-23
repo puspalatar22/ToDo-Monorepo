@@ -37,7 +37,11 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private recognition: any;
   isListening = false;
-  isSpeechRecognitionSupported = false; 
+  isSpeechRecognitionSupported = false;
+  finalTranscript = '';
+  manualEditing = false;
+  private autoSendTimeout: any;
+  isAdminFlowActive = false;
 
   constructor(
     @Inject(ChatService) private chatService: ChatService,
@@ -52,23 +56,32 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition;
 
-       this.isSpeechRecognitionSupported = !!SpeechRecognition;
+    this.isSpeechRecognitionSupported = !!SpeechRecognition;
 
     if (SpeechRecognition) {
       this.recognition = new SpeechRecognition();
       this.recognition.lang = 'en-IN';
-      this.recognition.continuous = false; 
+      this.recognition.continuous = false;
       this.recognition.interimResults = true;
+      this.recognition.maxAlternatives = 3;
 
       this.recognition.onstart = () => {
         this.ngZone.run(() => {
           this.isListening = true;
+          this.finalTranscript = '';
+          this.manualEditing = false;
         });
       };
 
       this.recognition.onend = () => {
         this.ngZone.run(() => {
           this.isListening = false;
+
+          if (!this.manualEditing && this.inputText.trim()) {
+            this.autoSendTimeout = setTimeout(() => {
+              this.sendMessage();
+            }, 1000);
+          }
         });
       };
 
@@ -80,13 +93,21 @@ export class ChatbotComponent implements OnInit, OnDestroy {
 
       this.recognition.onresult = (event: any) => {
         this.ngZone.run(() => {
+          let interimTranscript = '';
+
           for (let i = event.resultIndex; i < event.results.length; i++) {
-            const result = event.results[i];
-            if (result.isFinal) {
-              this.inputText = (this.inputText + ' ' + result[0].transcript).trim();
-              this.sendMessage();
+            const transcript = event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+              this.finalTranscript += transcript + ' ';
+            } else {
+              interimTranscript += transcript;
             }
           }
+
+          const text = (this.finalTranscript + interimTranscript).trim();
+
+          this.inputText = text;
         });
       };
     }
@@ -119,6 +140,20 @@ export class ChatbotComponent implements OnInit, OnDestroy {
       this.toggle.emit(this.isOpen);
     }
   }
+
+  onInputClick() {
+    this.manualEditing = true;
+
+    if (this.autoSendTimeout) {
+      clearTimeout(this.autoSendTimeout);
+      this.autoSendTimeout = null;
+    }
+
+    if (this.isListening) {
+      this.stopListening();
+    }
+  }
+
   toggleListening() {
     this.isListening = !this.isListening;
   }
@@ -153,9 +188,40 @@ export class ChatbotComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    if (!this.inputText.trim()) return;
-    this.chatService.sendMessage(this.inputText);
+    const text = this.inputText.trim();
+    if (!text) return;
+
+    const lower = text.toLowerCase();
+
+    const triggerAdmin =
+      lower.includes('update') || lower.includes('change answer') || lower.includes('edit');
+
+    if (triggerAdmin) {
+      this.isAdminFlowActive = true;
+    }
+
+    if (this.isAdminFlowActive) {
+      // Subscribe to admin API to check when update is completed
+      this.chatService.sendAdminMessage(text)?.subscribe({
+        next: (res) => {
+          // Exit admin flow only if backend completed update
+          if (res?.status === 'completed' || res?.result?.status === 'success') {
+            this.isAdminFlowActive = false;
+          }
+        },
+        error: () => {
+          // Reset on error
+          this.isAdminFlowActive = false;
+        }
+      });
+    } else {
+      this.chatService.sendMessage(text);
+    }
+
+    // Reset input and speech state
     this.inputText = '';
+    this.finalTranscript = '';
+    this.manualEditing = false;
   }
 
   handleKeyDown(event: KeyboardEvent) {

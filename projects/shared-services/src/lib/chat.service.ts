@@ -1,13 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatMessage, ChatState } from 'models';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as marked from 'marked';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  private readonly url = 'assets/mocks/chat-markdown-responses.json';
+  private readonly url = 'http://192.168.0.89:8004/ask';
+  private readonly adminUrl = 'http://192.168.0.89:8004/admin/chat';
+  private sessionId = crypto.randomUUID();
+  public isAnswerUpdated: boolean = false;
 
   private state: ChatState = {
     messages: [],
@@ -18,27 +21,10 @@ export class ChatService {
   private stateSubject = new BehaviorSubject<ChatState>(this.state);
   state$ = this.stateSubject.asObservable();
 
-  private mockData: any[] = [];
-  private dataloaded = false;
-  private pendingText: string | null = null;
-
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {
-    this.loadMockdata();
-  }
-
-  private loadMockdata() {
-    this.http.get<{ responses: any[] }>(this.url).subscribe({
-      next: (data) => {
-        this.mockData = data.responses;
-        this.dataloaded = true;
-        if (this.pendingText) {
-          this.respondToMessage(this.pendingText);
-          this.pendingText = null;
-        }
-      },
-      error: (err) => console.error('Failed to load mock data:', err),
-    });
-  }
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
+  ) { }
 
   toggleChat() {
     this.updateState({ isOpen: !this.state.isOpen });
@@ -54,18 +40,88 @@ export class ChatService {
     this.addMessage({ text: userText, sender: 'user' });
     this.updateState({ isTyping: true });
 
-    setTimeout(() => {
+    this.http.post<any>(this.url, {
+      query: userText,
+      session_id: this.sessionId
+    }).subscribe({
+      next: (res) => {
+        this.updateState({ isTyping: false });
+
+        // Adjust based on API response
+        const answer = res?.answer || res?.response || 'No response from server';
+
+        let combinedText = answer;
+
+        // Append images if present
+        if (res?.image_urls?.length) {
+          res.image_urls.forEach((url: string) => {
+            combinedText += `\n\n![image](${url})`;
+          });
+        }
+
+        this.addMessage({
+          text: combinedText,
+          sender: 'bot',
+          sources: res?.sources || [],
+        });
+      },
+      error: (err) => {
+        console.error('API Error:', err);
+        this.updateState({ isTyping: false });
+
+        this.addMessage({
+          text: 'Error connecting to server. Please try again.',
+          sender: 'bot',
+        });
+      },
+    });
+  }
+
+ sendAdminMessage(userText: string) {
+  if (!userText.trim()) return;
+
+  // Add user message
+  this.addMessage({ text: userText, sender: 'user' });
+  this.updateState({ isTyping: true });
+
+  // Return the observable so component can subscribe
+  return this.http.post<any>(this.adminUrl, {
+    query: userText,
+    session_id: this.sessionId
+  }).pipe(
+    // Tap into the response to handle side effects
+    tap((res) => {
       this.updateState({ isTyping: false });
 
-      if (!this.dataloaded) {
-        this.pendingText = userText.toLowerCase();
-        this.addMessage({ text: 'Loading Responses, Please wait...', sender: 'bot' });
-        return;
-      }
+      // Add bot response
+      this.addMessage({
+        text: res?.message || 'No response from admin API',
+        sender: 'bot',
+      });
 
-      this.respondToMessage(userText.toLowerCase());
-    }, 800);
-  }
+      // ✅ Update isAnswerUpdated if completed/success
+      if (res?.status === 'completed' || res?.result?.status === 'success') {
+        this.isAnswerUpdated = true;
+      } else {
+        this.isAnswerUpdated = false;
+      }
+    }),
+    catchError((err) => {
+      this.updateState({ isTyping: false });
+
+      this.addMessage({
+        text: err?.error?.message || 'Admin API error',
+        sender: 'bot',
+      });
+
+      // Reset flag on error
+      this.isAnswerUpdated = false;
+
+      // Re-throw error so component can handle if needed
+      return throwError(() => err);
+    })
+  );
+}
 
   private addMessage(partial: Partial<ChatMessage>) {
     const message: ChatMessage = {
@@ -87,37 +143,9 @@ export class ChatService {
     this.stateSubject.next(this.state);
   }
 
-  private respondToMessage(text: string) {
-    const matched = this.mockData.find((r) =>
-      r.keywords.some((k: string) => text.includes(k))
-    );
-
-    const response =
-      matched ?? this.mockData.find((r) => r.keywords.includes('default'));
-
-    if (!response) return;
-
-    // Merge Markdown images in text and any imageUrls array
-    let combinedText = response.answer;
-
-    // Append extra images at the bottom if any
-    if (response.image_urls?.length) {
-      response.image_urls.forEach((url: string) => {
-        combinedText += `\n\n![image](${url})`;
-      });
-    }
-
-    // Add bot message
-    this.addMessage({
-      text: combinedText,
-      sender: 'bot',
-      sources: response.sources,
-    });
-  }
-
   // Convert Markdown to HTML safely
-parseMarkdown(markdownText: string): SafeHtml {
-  const html = marked.parse(markdownText || '') as string;
-  return this.sanitizer.bypassSecurityTrustHtml(html);
-}
+  parseMarkdown(markdownText: string): SafeHtml {
+    const html = marked.parse(markdownText || '') as string;
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
 }

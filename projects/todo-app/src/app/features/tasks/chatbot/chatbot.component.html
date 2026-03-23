@@ -63,7 +63,8 @@
 
     <!-- Input -->
     <div class="chat-input">
-      <input type="text" [(ngModel)]="inputText" placeholder="Type a message..." (keydown)="handleKeyDown($event)" />
+      <input type="text" [(ngModel)]="inputText" placeholder="Type a message..." (keydown)="handleKeyDown($event)"
+        (click)="onInputClick()" />
       <button *ngIf="isSpeechRecognitionSupported" type="button" (click)="startListening()"
         [class.listening]="isListening">
         <img class="mic-btn" src="assets/images/mic.png" alt="mic-icon" />
