@@ -70,7 +70,7 @@ ng build ui-components
 ng serve todo-app
 ```
 
-Navigate to `http://localhost:4200`
+Navigate to `http://localhost:5000`
 
 ### 5. Run tests
 

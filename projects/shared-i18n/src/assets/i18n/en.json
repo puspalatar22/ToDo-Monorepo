@@ -1,9 +1,9 @@
 {
   "TASK_LIST": {
-     "TRANSLATE_HI": "Translate in Hindi",
+    "TRANSLATE_HI": "Translate in Hindi",
     "TRANSLATE_EN": "Translate in English",
     
-    "TITLE": "Title",
+    "TITLE": "Taskflow",
     "DESCRIPTION": "Description",
     "STATUS": "Status",
     "CREATED": "Created",

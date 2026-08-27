@@ -1,0 +1,50 @@
+{
+  "TASK_LIST": {
+    "TRANSLATE_HI": "Traduire en hindi",
+    "TRANSLATE_EN": "Traduire en anglais",
+
+    "TITLE": "Taskflow",
+    "DESCRIPTION": "Description",
+    "STATUS": "Statut",
+    "CREATED": "Créé",
+    "ACTIONS": "Actions",
+    "COMPLETED": "Terminé",
+    "PENDING": "En attente",
+    "NO_TASKS": "Aucune tâche disponible. Veuillez ajouter une nouvelle tâche.",
+
+    "ADD_NEW": "Ajouter une nouvelle tâche",
+    "ADD_TASK": "Ajouter une tâche",
+    "EDIT_TASK": "Modifier la tâche",
+    "UNDO": "Annuler",
+    "COMPLETE": "Terminer",
+    "DELETE": "Supprimer",
+    "EDIT": "Modifier",
+    "TITLE_PLACEHOLDER": "Saisissez le titre de la tâche",
+    "DESCRIPTION_PLACEHOLDER": "Saisissez la description de la tâche"
+  },
+
+  "TOAST": {
+    "TASK_ADDED": "Tâche ajoutée avec succès !",
+    "TASK_DELETED": "Tâche supprimée.",
+    "TASK_UPDATED": "Tâche mise à jour avec succès !"
+  },
+
+  "LOGIN": {
+    "TITLE": "Bienvenue",
+    "SUBTITLE": "Connectez-vous pour gérer vos tâches",
+    "EMAIL_PLACEHOLDER": "Entrez votre e-mail",
+    "PASSWORD_PLACEHOLDER": "Entrez votre mot de passe",
+    "SUBMIT": "Se connecter",
+    "SUCCESS": "Connexion réussie !",
+    "ERROR": "E-mail ou mot de passe invalide.",
+    "NO_ACCOUNT": "Vous n'avez pas de compte ?",
+    "REGISTER": "Inscrivez-vous ici"
+  },
+
+  "LOGOUT": {
+    "TITLE": "Déconnexion",
+    "MESSAGE": "Êtes-vous sûr de vouloir vous déconnecter ?",
+    "YES": "Oui",
+    "NO": "Non"
+  }
+}

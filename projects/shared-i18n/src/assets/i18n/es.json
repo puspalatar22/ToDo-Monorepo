@@ -1,0 +1,50 @@
+{
+  "TASK_LIST": {
+    "TRANSLATE_HI": "Traducir al hindi",
+    "TRANSLATE_EN": "Traducir al inglés",
+
+    "TITLE": "Taskflow",
+    "DESCRIPTION": "Descripción",
+    "STATUS": "Estado",
+    "CREATED": "Creado",
+    "ACTIONS": "Acciones",
+    "COMPLETED": "Completado",
+    "PENDING": "Pendiente",
+    "NO_TASKS": "No hay tareas disponibles. Por favor, agregue una nueva tarea.",
+
+    "ADD_NEW": "Agregar nueva tarea",
+    "ADD_TASK": "Agregar tarea",
+    "EDIT_TASK": "Editar tarea",
+    "UNDO": "Deshacer",
+    "COMPLETE": "Completar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "TITLE_PLACEHOLDER": "Ingrese el título de la tarea",
+    "DESCRIPTION_PLACEHOLDER": "Ingrese la descripción de la tarea"
+  },
+
+  "TOAST": {
+    "TASK_ADDED": "¡Tarea agregada exitosamente!",
+    "TASK_DELETED": "Tarea eliminada.",
+    "TASK_UPDATED": "¡Tarea actualizada exitosamente!"
+  },
+
+  "LOGIN": {
+    "TITLE": "Bienvenido",
+    "SUBTITLE": "Inicie sesión para administrar sus tareas",
+    "EMAIL_PLACEHOLDER": "Ingrese su correo electrónico",
+    "PASSWORD_PLACEHOLDER": "Ingrese su contraseña",
+    "SUBMIT": "Iniciar sesión",
+    "SUCCESS": "¡Sesión iniciada exitosamente!",
+    "ERROR": "Correo electrónico o contraseña inválidos.",
+    "NO_ACCOUNT": "¿No tiene una cuenta?",
+    "REGISTER": "Regístrese aquí"
+  },
+
+  "LOGOUT": {
+    "TITLE": "Cerrar sesión",
+    "MESSAGE": "¿Está seguro de que desea cerrar sesión?",
+    "YES": "Sí",
+    "NO": "No"
+  }
+}

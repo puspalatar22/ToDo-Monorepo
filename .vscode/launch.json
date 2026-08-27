@@ -7,8 +7,9 @@
       "type": "pwa-chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "url": "http://localhost:5000/"
     },
+    // npm run start:all
     {
       "name": "ng test",
       "type": "chrome",

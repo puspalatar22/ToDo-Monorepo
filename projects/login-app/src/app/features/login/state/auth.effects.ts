@@ -51,7 +51,7 @@ export class AuthEffects {
             this.toastService.show(msg, 'success');
           });
           document.cookie = 'isLoggedIn=true; path=/';
-          window.location.href = 'http://localhost:4200/tasks';
+          window.location.href = 'http://localhost:5000/tasks';
         }),
       ),
     { dispatch: false },
